@@ -62,6 +62,39 @@ void addAccount(Node**head) {
     std::cout << "Congratulations. Account has been registered!\n";
 }
 
+void deleteAccount(Node** head, int cardNumber) {
+    Node* current = *head;
+    Node* prev = nullptr;
+
+    // Find the node to delete
+    while (current != nullptr && current->CardNumber != cardNumber) {
+        prev = current;
+        current = current->Next;
+    }
+
+    // If account is found, delete it
+    if (current != nullptr) {
+        if (prev == nullptr) {
+            *head = current->Next; // Update head if deleting the first node
+        }
+        else {
+            prev->Next = current->Next;
+        }
+        delete current; // Free memory for the deleted node
+        std::cout << "Account with card number " << cardNumber << " has been deleted.\n";
+    }
+    else {
+        std::cout << "Account with card number " << cardNumber << " not found.\n";
+    }
+}
+
+void deleteCurrentUserAccount(Node** head, Node* currentUser) {
+    if (currentUser != nullptr) {
+        int cardNumberToDelete = currentUser->CardNumber;
+        deleteAccount(head, cardNumberToDelete);
+    }
+}
+
 Node* login(Node* head) {
     int cardNumber;
     std::string password;
@@ -96,10 +129,11 @@ void display(Node* n) {
     std::cout << std::endl;
 }
 
-// Main loop
-void runATM() {
+
+int main()
+{
     Node* head = new Node();
-    
+
     int choice;
     Node* current = head; // This variable existing for freeing memory !!! ADD ACCOUNT DELETING !!!
     Node* currentUser = nullptr;
@@ -143,7 +177,8 @@ void runATM() {
             std::cout << "1. Check your current balance" << std::endl;
             std::cout << "2. Add money to Balance" << std::endl;
             std::cout << "3. Transfer money to another CardNumber" << std::endl;
-            std::cout << "4. Back to previous menu" << std::endl;
+            std::cout << "4. Delete your account" << std::endl;
+            std::cout << "5. Back to previous menu" << std::endl;
             std::cout << "Enter your choice: ";
             std::cin >> choice;
 
@@ -191,6 +226,15 @@ void runATM() {
                 }
                 break;
             case 4:
+                char confirmDelete;
+                std::cout << "Are you sure you want to delete your account? (y/n): ";
+                std::cin >> confirmDelete;
+                if (confirmDelete == 'y' || confirmDelete == 'Y') {
+                    deleteCurrentUserAccount(&head, currentUser);
+                    currentUser = nullptr; // Back to previous menu
+                }
+                break;
+            case 5:
                 currentUser = nullptr; // Back to previous menu
                 break;
             default:
@@ -198,12 +242,6 @@ void runATM() {
             }
         }
     } while (true); // FIX THING WITH EXITING
-}
-
-
-int main()
-{
-    runATM();
 
     system("pause>0");
 }
