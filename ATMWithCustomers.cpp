@@ -121,9 +121,10 @@ Node* login(Node* head) {
 // Show all existing accounts for checking
 void display(Node* n) {
     while (n != NULL) {
-        std::cout << n->CardNumber << " ";
-        std::cout << n->Password << " ";
-        std::cout << n->Balance << " ";
+        std::cout << "Card number: " << n->CardNumber << " ";
+        std::cout << "Password: " << n->Password << " ";
+        std::cout << "Balance: " << n->Balance << "\n ";
+        std::cout << "======================================= \n";
         n = n->Next;
     }
     std::cout << std::endl;
@@ -135,7 +136,7 @@ int main()
     Node* head = new Node();
 
     int choice;
-    Node* current = head; // This variable existing for freeing memory !!! ADD ACCOUNT DELETING !!!
+    Node* current = head; // This variable existing for freeing memory
     Node* currentUser = nullptr;
 
     do {
@@ -158,7 +159,7 @@ int main()
             display(head); // Show all existing accounts
             break;
         case 4:
-            // Free memory (Optional, but recommended)
+            // Free memory (if we decide to develop this program it can be helpful)
             while (current != NULL) {
                 Node* next = current->Next;
                 delete current;
@@ -233,6 +234,7 @@ int main()
                     deleteCurrentUserAccount(&head, currentUser);
                     currentUser = nullptr; // Back to previous menu
                 }
+                else break;
                 break;
             case 5:
                 currentUser = nullptr; // Back to previous menu
@@ -241,7 +243,7 @@ int main()
                 std::cout << "Invalid choice. Please try again." << std::endl;
             }
         }
-    } while (true); // FIX THING WITH EXITING
+    } while (choice!=4);
 
     system("pause>0");
 }
